@@ -1,0 +1,116 @@
+import random
+from random import randint
+from abc import ABCMeta, abstractmethod
+
+class Bank(metaclass=ABCMeta):
+    @abstractmethod
+    def NewAccount():
+        return 0
+    @abstractmethod
+    def ExistingAccountAuthenticate():
+        return 0 
+    @abstractmethod
+    def displayUserDetails():
+        return 0
+    @abstractmethod
+    def withdrawAmount():
+        return 0
+    @abstractmethod
+    def DepositAmount():
+        return 0
+    @abstractmethod
+    def DisplayBalance():
+        return 0 
+    
+class AccountDetail(Bank):
+    Users={12345:['Sam', 1300], 13579:['Ben', 3400], 24682:['Josh', 250]}
+
+    def NewAccount(self, userName, initialDeposit):
+        self.userName= userName
+        self.initialDeposit = initialDeposit
+        self.AccountNumber=int(''.join(random.sample('0123456789', 5)))
+        AccountDetail.Users[self.AccountNumber]=[userName, initialDeposit]
+        self.displayUserDetails()
+
+    def ExistingAccountAuthenticate(self, userName, AccountNumber):
+        while(len(str(AccountNumber)) != 5):
+            print('Error! Enter 5-digit account number')
+            AccountNumber=int(input())
+        if(AccountNumber in AccountDetail.Users.keys()):
+            if(userName == AccountDetail.Users[AccountNumber][0]):
+                print('User Found. Authentication Successful')
+                return True
+            else:
+                print('No User Found. Authentication Failed')
+                return False
+        else:
+            print('No account Found. Authentication Failed')
+            return False
+            
+    def displayUserDetails(self):
+        print('Account created Successfully')
+        print('{} with account number {}'.format(self.userName, self.AccountNumber))
+        print('\n')
+        
+    def withdrawAmount(self, Wamount):
+        while(Wamount>self.initialDeposit):
+            print('Your account contain insufficient money\nEnter correct amount')
+            Wamount=int(input())
+        self.initialDeposit-=Wamount
+        print('Withdraw Amount Succesfully\n')
+        self.DisplayBalance()
+        return self.initialDeposit
+    
+    def DepositAmount(self, Damount):
+        self.initialDeposit+=Damount
+        print('Deposit Amount Succesfully\n')
+        self.DisplayBalance()
+        return self.initialDeposit
+    
+    def DisplayBalance(self):
+        print('Your balance:')
+        print(self.initialDeposit)          
+        
+        
+        bankobj=AccountDetail()
+
+while True:
+    print('Enter 1 if you wish to create new saving account \nEnter 2 if you wish to access an existing account\nEnter 3 to quit\n')
+    UserWish=int(input())
+    if(UserWish == 1):
+        print('Enter your Name:')
+        userName=str(input())
+        print('Enter your initial deposit:')
+        initialDeposit=int(input())
+        bankobj.NewAccount(userName, initialDeposit)
+        
+    elif(UserWish == 2):
+        print('Enter your Name:')
+        userName=str(input())
+        initialDeposit=int(''.join(random.sample('0123456789', randint(4, 10))))
+        print('Enter your Account Number:')
+        AccountNumber=int(input())
+        bankobj.ExistingAccountAuthenticate(userName, AccountNumber)
+        
+    elif(UserWish == 3):
+        break
+    
+
+    while True:
+        print('\n\nEnter a to check to withdraw\nEnter b to deposit\nEnter c to display balance\nEnter d to quit')
+        UserOpt=str(input())
+        if(UserOpt == 'a'):
+            print('Enter the amount you want to withdraw')
+            Wamount=int(input())
+            initialDeposit=bankobj.withdrawAmount(Wamount)
+        
+        elif(UserOpt == 'b'):
+            print('Enter the amount you want to deposit')
+            Damount=int(input())
+            initialDeposit=bankobj.DepositAmount(Damount)
+        
+        elif(UserOpt == 'c'):
+            print(bankobj.DisplayBalance())
+        
+        elif(UserOpt == 'd'):
+            break
