@@ -11,7 +11,7 @@ Before running the program, ensure that you have the following:
 Installation
 1. Clone this repository to your local machine using Git:
 
-        git clone <repository-url>
+        git clone https://github.com/tsameema/MoneyMagnetX
 2. Navigate to the directory containing the code:
  
         cd bank-account-management
